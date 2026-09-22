@@ -24,6 +24,11 @@
 //   REACT_APP_SUPABASE_ANON_KEY  the project's anon key
 //   REACT_APP_VAPID_PUBLIC       public half of the push key pair — optional; without it
 //                                push notifications are simply unavailable
+//   REACT_APP_FUNCTIONS_URL      optional — where the Netlify functions actually live,
+//                                when that differs from REACT_APP_SITE_URL (e.g. the app
+//                                is hosted on Vercel but the functions stay on Netlify).
+//                                Falls back to REACT_APP_SITE_URL when unset, which is the
+//                                same-origin case this was written for originally.
 
 const CONFIG = {
   appName: 'Trip Monitor',
@@ -31,6 +36,7 @@ const CONFIG = {
   logo: '/logo.png',
 
   site: process.env.REACT_APP_SITE_URL || '',
+  functionsSite: process.env.REACT_APP_FUNCTIONS_URL || process.env.REACT_APP_SITE_URL || '',
 
   // The anon key is public by design — it ships inside the bundle either way and is
   // useless without the row-level policies behind it. The service key is a different
@@ -50,8 +56,13 @@ if (!(CONFIG.site && CONFIG.supabaseUrl && CONFIG.supabaseAnonKey)) {
   );
 }
 
-export const BRAND = { ...CONFIG, site: CONFIG.site.replace(/\/+$/, '') };
+export const BRAND = {
+  ...CONFIG,
+  site: CONFIG.site.replace(/\/+$/, ''),
+  functionsSite: CONFIG.functionsSite.replace(/\/+$/, ''),
+};
 
 // Where the functions live for this build. Anything calling out to the backend goes
-// through here rather than writing the host again.
-export const FN = (name) => `${BRAND.site}/.netlify/functions/${name}`;
+// through here rather than writing the host again. Usually the same origin as the site;
+// set REACT_APP_FUNCTIONS_URL when it isn't (see the note above CONFIG).
+export const FN = (name) => `${BRAND.functionsSite}/.netlify/functions/${name}`;
