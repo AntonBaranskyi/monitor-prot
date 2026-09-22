@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Trip Monitor</string>
+    <string name="title_activity_main">Trip Monitor</string>
+    <string name="package_name">tripmonitor.app</string>
+    <string name="custom_url_scheme">tripmonitor.app</string>
+</resources>

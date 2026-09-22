@@ -1,0 +1,9 @@
+/node_modules
+/build
+.env.local
+.DS_Store
+npm-debug.log*
+# Release signing material — NEVER commit
+keystore.properties
+*.jks
+*.keystore
